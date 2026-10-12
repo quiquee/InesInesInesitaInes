@@ -7,6 +7,10 @@ export const CONFIG = {
   // y pega aquí el resultado. Recuerda: 6 letras sin I, L ni O.
   adminCodeHash: '84b2ae896f51981833aded5eeab136cbdce54b5d5415a75fb87cbe0ff0642f11',
 
+  // SHA-256 del código de observador (EEEEEE): vista de solo lectura con el registro completo
+  // de la partida en texto (roles, trozos y mensajes privados). Se calcula igual que el anterior.
+  spectatorCodeHash: 'a31fa49a7cb2b0fe83995e8f9c5f0f2f22982bffeebe187e3004b3d034186048',
+
   // Identificador de la partida (ruta en la base de datos).
   gameId: 'tarta-ines',
 

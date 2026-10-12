@@ -195,3 +195,6 @@ label { display: block; font-weight: bold; margin: 10px 0 4px; }
 .url { word-break: break-all; font-size: .8rem; }
 
 .mode { color: #fff; text-align: center; font-size: .8rem; opacity: .8; }
+
+.spec { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .78rem; background: #111; color: #9fef9f; padding: 10px; border-radius: 8px; overflow: auto; white-space: pre; margin: 6px 0 0; }
+#spec-log { max-height: 50vh; }
