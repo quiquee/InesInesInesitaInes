@@ -515,8 +515,10 @@ document.addEventListener('click', async (e) => {
     case 'accuse': {
       const target = s.players[ui.selected];
       if (target && confirm(`¿Seguro que acusas a ${target.character}? Si te equivocas quedarás eliminada.`)) {
-        await run((st) => accuse(st, me, ui.selected));
-        ui.selected = null;
+        if (await run((st) => accuse(st, me, ui.selected))) {
+          ui.selected = null;
+          render();
+        }
       }
       break;
     }

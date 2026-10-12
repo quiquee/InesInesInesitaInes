@@ -44,7 +44,7 @@ export function normalizeState(raw) {
   s.players = Object.assign(Object.create(null), raw.players && typeof raw.players === 'object' ? raw.players : {});
   for (const id of Object.keys(s.players)) {
     const p = { ...s.players[id] };
-    p.asked = p.asked && typeof p.asked === 'object' ? p.asked : {};
+    p.asked = Object.assign(Object.create(null), p.asked && typeof p.asked === 'object' ? p.asked : {});
     p.slices = p.slices || 0;
     p.eaten = p.eaten || 0;
     p.role = p.role || null;
