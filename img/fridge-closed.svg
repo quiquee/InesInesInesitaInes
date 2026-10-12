@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Una nevera cerrada en la cocina de Inés, de noche">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d348b"/><stop offset="1" stop-color="#7678ed"/></linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f1faee"/><stop offset="1" stop-color="#cfe3ef"/></linearGradient>
+    <radialGradient id="moon" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff9c4"/><stop offset="1" stop-color="#ffe066"/></radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#wall)"/>
+  <rect x="20" y="30" width="90" height="90" rx="8" fill="#1d1a4d" stroke="#f7b801" stroke-width="6"/>
+  <circle cx="70" cy="70" r="20" fill="url(#moon)"/>
+  <circle cx="45" cy="95" r="2" fill="#fff"/><circle cx="90" cy="50" r="2" fill="#fff"/>
+  <line x1="65" y1="30" x2="65" y2="120" stroke="#f7b801" stroke-width="4"/>
+  <line x1="20" y1="75" x2="110" y2="75" stroke="#f7b801" stroke-width="4"/>
+  <rect x="0" y="340" width="400" height="60" fill="#f18701"/>
+  <path d="M0 340h400" stroke="#9e4a00" stroke-width="4"/>
+  <ellipse cx="225" cy="352" rx="110" ry="10" fill="#000" opacity=".25"/>
+  <rect x="125" y="40" width="200" height="310" rx="26" fill="url(#body)" stroke="#2b2d42" stroke-width="6"/>
+  <line x1="128" y1="150" x2="322" y2="150" stroke="#2b2d42" stroke-width="6"/>
+  <rect x="290" y="70" width="14" height="58" rx="7" fill="#adb5bd" stroke="#2b2d42" stroke-width="4"/>
+  <rect x="290" y="175" width="14" height="100" rx="7" fill="#adb5bd" stroke="#2b2d42" stroke-width="4"/>
+  <!-- imanes y dibujo -->
+  <rect x="160" y="185" width="70" height="60" rx="4" fill="#fff" stroke="#2b2d42" stroke-width="3" transform="rotate(-6 195 215)"/>
+  <circle cx="180" cy="210" r="7" fill="#ff4d6d"/><path d="M172 235l10-14 10 14z" fill="#ff4d6d"/>
+  <circle cx="210" cy="207" r="7" fill="#4cc9f0"/><path d="M202 232l10-14 10 14z" fill="#4cc9f0"/>
+  <circle cx="195" cy="183" r="7" fill="#ffd60a" stroke="#2b2d42" stroke-width="2"/>
+  <text x="200" y="110" font-family="Comic Sans MS, Comic Neue, cursive" font-size="22" text-anchor="middle" fill="#ff4d6d">¡No tocar!</text>
+  <text x="200" y="300" font-size="34" text-anchor="middle">🎂❓</text>
+  <!-- ojos curiosos de la nevera -->
+  <g fill="#2b2d42"><circle cx="175" cy="70" r="5"/><circle cx="225" cy="70" r="5"/></g>
+</svg>
