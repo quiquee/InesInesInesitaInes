@@ -5,7 +5,7 @@ export const CONFIG = {
   //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('OPQRST'))
   //     .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('')))
   // y pega aquí el resultado. Recuerda: 6 letras sin I, L ni O.
-  adminCodeHash: 'f1a978392d2d60791856af4266cf2c80deb8d987b8e9a71681a0ae8e975f0ff8',
+  adminCodeHash: 'aa02167355d5d5a5cae1a8f046306943ec031a24c86778826c7930ec7f999d15',
 
   // Identificador de la partida (ruta en la base de datos).
   gameId: 'tarta-ines',
