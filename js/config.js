@@ -2,7 +2,7 @@
 export const CONFIG = {
   // SHA-256 del código secreto de Inés (en MAYÚSCULAS). Para cambiarlo, abre la consola del
   // navegador en la web del juego y ejecuta:
-  //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('NUEVOCODIGO'))
+  //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('OPQRST'))
   //     .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('')))
   // y pega aquí el resultado. Recuerda: 6 letras sin I, L ni O.
   adminCodeHash: 'f1a978392d2d60791856af4266cf2c80deb8d987b8e9a71681a0ae8e975f0ff8',
