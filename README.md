@@ -82,6 +82,8 @@ navegador; sirve para probar con varias pestañas).
 
 En `js/config.js` se guarda solo el **hash SHA-256** del código (en mayúsculas, 6 letras sin I/L/O).
 El propio fichero explica cómo calcular uno nuevo desde la consola del navegador.
+Es solo una barrera para curiosas: como todo funciona en el navegador, alguien con conocimientos
+técnicos podría averiguarlo. No compartas el código de Inés con nadie.
 
 ### Publicar en GitHub Pages
 

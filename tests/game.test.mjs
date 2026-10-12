@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   createInitialState, addPlayer, startGame, ask, respond, decide, accuse, eat, give, endGame,
   ROLES, STATUS, HOST_ID, GameError, totalSlicesInPlay, remainingQuestionBound, normalizeState,
-  removePlayer, resetGame,
+  removePlayer, resetGame, setHostPlays, visibleLog,
 } from '../js/game.js';
 import { generateCode, isValidCode, normalizeCode, CODE_ALPHABET } from '../js/codes.js';
 
@@ -218,4 +218,30 @@ test('cualquier partida aleatoria termina', () => {
     }
     assert.ok(['thief', 'detectives'].includes(s.winner));
   }
+});
+
+test('setHostPlays solo en el lobby', () => {
+  const s = setHostPlays(lobby(3), false);
+  assert.equal(s.settings.hostPlays, false);
+  const started = startGame(lobby(3), { accomplices: 0, totalSlices: 12 });
+  assert.throws(() => setHostPlays(started, false), GameError);
+});
+
+test('pasar tarta: solo dentro de la banda y con trozos suficientes', () => {
+  const { s, thief, accs, dets } = setup();
+  assert.throws(() => give(s, thief, dets[0], 1), GameError);
+  assert.throws(() => give(s, dets[0], thief, 1), GameError);
+  assert.throws(() => give(s, thief, accs[0], 13), GameError);
+  assert.throws(() => give(s, thief, '__proto__', 1), GameError);
+  assert.equal(give(s, thief, accs[0], 2).players[accs[0]].slices, 2);
+});
+
+test('el registro privado solo lo ven las implicadas', () => {
+  let { s, thief, dets } = setup();
+  s = ask(s, dets[0], thief);
+  const priv = s.log.filter((e) => e.audience);
+  assert.equal(priv.length, 1);
+  assert.ok(visibleLog(s, dets[0]).includes(priv[0]));
+  assert.ok(visibleLog(s, thief).includes(priv[0]));
+  assert.ok(!visibleLog(s, dets[1]).includes(priv[0]));
 });

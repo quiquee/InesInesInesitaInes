@@ -74,13 +74,17 @@ function requirePhase(state, phase) {
   }
 }
 
+function isSafeKey(id) {
+  return typeof id === 'string' && id !== '__proto__' && id !== 'constructor' && id !== 'prototype';
+}
+
 function requirePlayer(state, id) {
-  if (typeof id !== 'string' || !Object.hasOwn(state.players, id)) fail('Jugadora desconocida.');
+  if (!isSafeKey(id) || !Object.hasOwn(state.players, id)) fail('Jugadora desconocida.');
   return state.players[id];
 }
 
 function getQuestion(state, id) {
-  if (typeof id !== 'string' || !Object.hasOwn(state.questions, id)) return null;
+  if (!isSafeKey(id) || !Object.hasOwn(state.questions, id)) return null;
   return state.questions[id];
 }
 
@@ -318,17 +322,17 @@ export function decide(state0, questionId, byId, accept) {
     det.status = STATUS.BRIBED;
     q.result = 'accepted';
     addLog(state, `${det.character} acepta el soborno de ${briber.character} y se come ${q.offer} trozo(s).`, [byId, q.to]);
-    // Las preguntas que tuviera pendientes como detective quedan anuladas.
+    // checkEnd anula las preguntas que tuviera pendientes como detective.
   } else {
     q.result = 'rejected';
+    // Quien ofrecía recupera los trozos reservados.
+    briber.slices += q.offer;
     if (briber.role === ROLES.THIEF) {
       // Rechazar el soborno de la ladrona es peligroso: la detective desaparece.
-      briber.slices += q.offer;
       addLog(state, `${det.character} rechaza el soborno de ${briber.character}... y desaparece misteriosamente.`, [byId, q.to]);
       eliminate(state, det);
     } else {
-      // Si quien ofrecía no era la ladrona, recupera sus trozos y no pasa nada más.
-      briber.slices += q.offer;
+      // Si quien ofrecía no era la ladrona, no pasa nada más.
       addLog(state, `${det.character} rechaza el soborno de ${briber.character}.`, [byId, q.to]);
     }
   }
