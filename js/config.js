@@ -19,7 +19,7 @@ export const CONFIG = {
     authDomain: 'webaps-firebase.firebaseapp.com',
     databaseURL: 'https://webaps-firebase-default-rtdb.europe-west1.firebasedatabase.app',
     projectId: 'webaps-firebase',
-}
+},
 
 
   // URL pública del juego (GitHub Pages). Si es null se usa la URL actual del navegador.
