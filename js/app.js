@@ -171,7 +171,9 @@ function render() {
     return renderLogin();
   }
   let html = '<h1>¿Quién se ha comido la tarta de Inés?</h1>';
-  if (isAdmin()) {
+  if (ui.session.kind === 'spectator') {
+    html += spectatorView(s);
+  } else if (isAdmin()) {
     const canPlay = !!s.players[HOST_ID];
     html += `<nav class="tabs">
       <button class="${ui.tab === 'manage' ? 'active' : ''}" data-action="tab" data-tab="manage">👑 Gestionar</button>
@@ -190,7 +192,12 @@ function render() {
     kept[el.id] = el.type === 'checkbox' ? null : el.value;
   }
   const focused = document.activeElement?.id;
+  const oldLog = document.getElementById('spec-log');
+  const stick = !oldLog || oldLog.scrollTop + oldLog.clientHeight >= oldLog.scrollHeight - 8;
+  const oldTop = oldLog ? oldLog.scrollTop : 0;
   app.innerHTML = html;
+  const newLog = document.getElementById('spec-log');
+  if (newLog) newLog.scrollTop = stick ? newLog.scrollHeight : oldTop;
   for (const [id, value] of Object.entries(kept)) {
     const el = document.getElementById(id);
     if (!el || value === null) continue;
@@ -201,6 +208,43 @@ function render() {
     }
   }
   if (focused) document.getElementById(focused)?.focus();
+}
+
+const ROLE_LABEL = { [ROLES.THIEF]: 'LADRONA', [ROLES.ACCOMPLICE]: 'CÓMPLICE', [ROLES.DETECTIVE]: 'DETECTIVE' };
+const STATUS_LABEL = { [STATUS.ACTIVE]: 'activa', [STATUS.BRIBED]: 'sobornada', [STATUS.ELIMINATED]: 'eliminada' };
+
+function pad(text, n) {
+  const t = String(text ?? '');
+  return t.length >= n ? t : t + ' '.repeat(n - t.length);
+}
+
+// Vista de observador (código de acceso especial): todo el estado y el registro, en texto plano.
+function spectatorView(s) {
+  const who = (id) => (s.players[id] ? `${s.players[id].character}` : String(id));
+  const time = (at) => (at ? new Date(at).toLocaleTimeString('es-ES') : '--:--:--');
+  const players = Object.values(s.players);
+  const rows = players.map((p) => (
+    `${pad(p.character, 14)} ${pad(p.realName, 14)} ${pad(p.code, 7)} ${pad(ROLE_LABEL[p.role] || '-', 9)} `
+    + `${pad(STATUS_LABEL[p.status] || p.status, 10)} trozos:${pad(p.slices, 3)} comidos:${pad(p.eaten, 3)}`
+  ));
+  const questions = Object.values(s.questions).filter((q) => q.status === 'pending' || q.status === 'offered');
+  const qLines = questions.map((q) => `  ${who(q.from)} -> ${who(q.to)}  [${q.status}${q.offer ? `, ofrece ${q.offer}` : ''}]`);
+  const logLines = s.log.map((e) => (
+    `[${time(e.at)}] #${pad(e.id, 4)}${e.audience ? ` (privado: ${e.audience.map(who).join(', ')})` : ''} ${e.text}`
+  ));
+  const head = [
+    `FASE: ${s.phase}${s.winner ? `   GANADOR: ${s.winner}` : ''}${s.endReason ? `   MOTIVO: ${s.endReason}` : ''}`,
+    `Cómplices: ${s.settings.accomplices}   Trozos totales: ${s.settings.totalSlices}   Jugadoras: ${players.length}`,
+  ];
+  const text = [
+    ...head, '', 'JUGADORAS', ...(rows.length ? rows : ['  (ninguna)']),
+    '', 'PREGUNTAS PENDIENTES', ...(qLines.length ? qLines : ['  (ninguna)']),
+  ].join('\n');
+  return `<nav class="tabs"><button class="secondary" data-action="logout">Salir</button></nav>
+    <section class="card"><h2>🕵️ Observador (solo lectura)</h2>
+      <pre class="spec">${esc(text)}</pre></section>
+    <section class="card"><h2>📜 Registro en tiempo real (${logLines.length})</h2>
+      <pre class="spec" id="spec-log">${esc(logLines.length ? logLines.join('\n') : '(sin eventos todavía)')}</pre></section>`;
 }
 
 function renderLogin() {
@@ -233,6 +277,8 @@ async function login(raw) {
   if (globalThis.crypto?.subtle && (await sha256Hex(code)) === CONFIG.adminCodeHash) {
     ui.session = { kind: 'admin' };
     ui.tab = 'manage';
+  } else if (globalThis.crypto?.subtle && (await sha256Hex(code)) === CONFIG.spectatorCodeHash) {
+    ui.session = { kind: 'spectator' };
   } else if (Object.hasOwn(ui.state.players, code)) {
     ui.session = { kind: 'player', id: code };
   } else {
