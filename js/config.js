@@ -13,13 +13,14 @@ export const CONFIG = {
   // Para jugar desde varios móviles hace falta una base de datos compartida.
   // Crea un proyecto gratuito en Firebase con "Realtime Database" y pega aquí su configuración
   // web. Si se deja en null, el juego funciona en "modo demo" guardando todo en este navegador.
-  firebase: null,
-  // firebase: {
-  //   apiKey: '...',
-  //   authDomain: 'tu-proyecto.firebaseapp.com',
-  //   databaseURL: 'https://tu-proyecto-default-rtdb.europe-west1.firebasedatabase.app',
-  //   projectId: 'tu-proyecto',
-  // },
+  //firebase: null,
+ firebase: {
+    apiKey: 'BFyybqLM3xbLK240U-4HzILbTKr1WbrEiq675GT_thDNP-x9R395ULM02qcEkThuw-uZvNxnWz37BKAAfev5Jm0',
+    authDomain: 'webaps-firebase.firebaseapp.com',
+    databaseURL: 'https://webaps-firebase-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'webaps-firebase',
+}
+
 
   // URL pública del juego (GitHub Pages). Si es null se usa la URL actual del navegador.
   publicUrl: null,
