@@ -8,7 +8,7 @@ Juego web de una sola página (HTML + JavaScript, sin compilación) pensado para
 
 ### Cómo se juega
 
-1. **Inés** entra con su código secreto (por defecto `MBMWZC`, ¡cámbialo! ver más abajo).
+1. **Inés** entra con su código secreto (configúralo antes de publicar: ver *Cambiar el código de Inés*).
 2. En *Gestionar* escribe el nombre de una amiga. Se genera:
    - un **personaje** (Elsa, Moana, Mirabel, Dory, Jessie, Tigresa…). Las demás solo verán el personaje;
      el nombre real solo lo ve Inés.

@@ -75,9 +75,13 @@ function requirePhase(state, phase) {
 }
 
 function requirePlayer(state, id) {
-  const p = state.players[id];
-  if (!p) fail('Jugadora desconocida.');
-  return p;
+  if (typeof id !== 'string' || !Object.hasOwn(state.players, id)) fail('Jugadora desconocida.');
+  return state.players[id];
+}
+
+function getQuestion(state, id) {
+  if (typeof id !== 'string' || !Object.hasOwn(state.questions, id)) return null;
+  return state.questions[id];
 }
 
 function isActiveDetective(p) {
@@ -125,6 +129,13 @@ export function removePlayer(state0, id) {
   if (id === HOST_ID) fail('No puedes eliminar a Inés.');
   requirePlayer(state, id);
   delete state.players[id];
+  return state;
+}
+
+export function setHostPlays(state0, hostPlays) {
+  const state = normalizeState(clone(state0));
+  requirePhase(state, 'lobby');
+  state.settings.hostPlays = !!hostPlays;
   return state;
 }
 
@@ -245,12 +256,12 @@ export function ask(state0, fromId, toId) {
 export function respond(state0, questionId, byId, offer) {
   const state = normalizeState(clone(state0));
   requirePhase(state, 'playing');
-  const q = state.questions[questionId];
+  const q = getQuestion(state, questionId);
   if (!q || q.status !== 'pending') fail('Esa pregunta ya no está pendiente.');
   if (q.to !== byId) fail('Esa pregunta no es para ti.');
   const by = requirePlayer(state, byId);
   const asker = requirePlayer(state, q.from);
-  offer = Number(offer) || 0;
+  offer = Number(offer);
   if (!Number.isInteger(offer) || offer < 0) fail('Oferta no válida.');
   if (offer === 0) {
     q.status = 'closed';
@@ -294,7 +305,7 @@ function eliminate(state, p) {
 export function decide(state0, questionId, byId, accept) {
   const state = normalizeState(clone(state0));
   requirePhase(state, 'playing');
-  const q = state.questions[questionId];
+  const q = getQuestion(state, questionId);
   if (!q || q.status !== 'offered') fail('No hay ninguna oferta pendiente.');
   if (q.from !== byId) fail('Esa oferta no es para ti.');
   const det = requirePlayer(state, byId);
@@ -415,7 +426,10 @@ export function endGame(state0) {
   requirePhase(state, 'playing');
   // Devolvemos ofertas pendientes antes de cerrar.
   for (const q of Object.values(state.questions)) {
-    if (q.status === 'offered') state.players[q.to].slices += q.offer;
+    if (q.status !== 'offered') continue;
+    const target = state.players[q.to];
+    if (target && target.status !== STATUS.ELIMINATED) target.slices += q.offer;
+    else distribute(state, q.offer);
   }
   return finish(state, 'thief', 'Inés ha terminado la partida y la ladrona ha escapado.');
 }

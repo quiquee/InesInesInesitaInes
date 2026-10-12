@@ -65,11 +65,8 @@ class FirebaseStore {
     await loadScript(`${base}/firebase-database-compat.js`);
     const app = window.firebase.initializeApp(this.config);
     this.ref = app.database().ref(`games/${this.gameId}`);
-    // Mantener la caché caliente para que las transacciones partan del estado real.
-    this.ready = new Promise((resolve) => {
-      this.ref.on('value', () => resolve());
-    });
-    await this.ready;
+    // Cargar el estado inicial (la suscripción mantiene la caché para las transacciones).
+    await this.ref.once('value');
   }
 
   subscribe(cb) {

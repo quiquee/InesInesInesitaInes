@@ -3,7 +3,7 @@ import { createStore } from './store.js';
 import { normalizeCode, isValidCode, sha256Hex } from './codes.js';
 import {
   HOST_ID, ROLES, STATUS, MIN_SLICES, GameError, maxAccomplices,
-  addPlayer, removePlayer, startGame, ask, respond, decide, accuse, eat, give, endGame, resetGame,
+  addPlayer, removePlayer, setHostPlays, startGame, ask, respond, decide, accuse, eat, give, endGame, resetGame,
   askableTargets, availableTargets, pendingQuestionOf, visibleLog, activeDetectives,
 } from './game.js';
 import { drawQr } from './qr.js';
@@ -92,11 +92,12 @@ function introSeen() {
 async function run(fn) {
   ui.error = '';
   try {
-    await ui.store.transact(fn);
+    return await ui.store.transact(fn);
   } catch (e) {
     ui.error = e instanceof GameError ? e.message : `Error: ${e.message}`;
     if (!(e instanceof GameError)) console.error(e);
     render();
+    return null;
   }
 }
 
@@ -555,12 +556,13 @@ document.addEventListener('submit', async (e) => {
     const input = document.getElementById('realName');
     const name = input.value;
     input.value = '';
-    let created = null;
-    await run((st) => {
+    let createdId = null;
+    const result = await run((st) => {
       const r = addPlayer(st, name);
-      created = r.player;
+      createdId = r.player.id;
       return r.state;
     });
+    const created = result && createdId ? result.players[createdId] : null;
     if (created && !ui.error) showQr(created);
     else if (document.getElementById('realName')) document.getElementById('realName').value = name;
   } else if (e.target.id === 'start') {
@@ -579,7 +581,7 @@ document.addEventListener('submit', async (e) => {
 document.addEventListener('change', async (e) => {
   if (e.target.id === 'hostPlays') {
     const checked = e.target.checked;
-    await run((st) => ({ ...st, settings: { ...st.settings, hostPlays: checked } }));
+    await run((st) => setHostPlays(st, checked));
   }
 });
 
