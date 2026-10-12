@@ -29,7 +29,7 @@ export const CONFIG = {
   messagingSenderId: "930953875867",
   appId: "1:930953875867:web:685bbbc218e1aef7cd913e",
   measurementId: "G-EZKY675457"
-};
+},
 
   // URL pública del juego (GitHub Pages). Si es null se usa la URL actual del navegador.
   publicUrl: null,
