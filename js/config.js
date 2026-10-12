@@ -2,10 +2,10 @@
 export const CONFIG = {
   // SHA-256 del código secreto de Inés (en MAYÚSCULAS). Para cambiarlo, abre la consola del
   // navegador en la web del juego y ejecuta:
-  //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('OPQRST'))
+  //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('PQRSTU'))
   //     .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('')))
   // y pega aquí el resultado. Recuerda: 6 letras sin I, L ni O.
-  adminCodeHash: 'aa02167355d5d5a5cae1a8f046306943ec031a24c86778826c7930ec7f999d15',
+  adminCodeHash: '84b2ae896f51981833aded5eeab136cbdce54b5d5415a75fb87cbe0ff0642f11',
 
   // Identificador de la partida (ruta en la base de datos).
   gameId: 'tarta-ines',
