@@ -233,7 +233,7 @@ async function login(raw) {
   if (globalThis.crypto?.subtle && (await sha256Hex(code)) === CONFIG.adminCodeHash) {
     ui.session = { kind: 'admin' };
     ui.tab = 'manage';
-  } else if (ui.state.players[code]) {
+  } else if (Object.hasOwn(ui.state.players, code)) {
     ui.session = { kind: 'player', id: code };
   } else {
     ui.error = 'Código desconocido. ¿Seguro que te lo ha dado Inés?';
@@ -507,7 +507,10 @@ document.addEventListener('click', async (e) => {
       if (confirm('¿Borrar todas las jugadoras y códigos?')) await run((st) => resetGame(st, false));
       break;
     case 'ask':
-      await run((st) => ask(st, me, ui.selected));
+      if (await run((st) => ask(st, me, ui.selected))) {
+        ui.selected = null;
+        render();
+      }
       break;
     case 'accuse': {
       const target = s.players[ui.selected];

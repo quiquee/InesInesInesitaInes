@@ -40,7 +40,8 @@ export function normalizeState(raw) {
   const base = createInitialState();
   if (!raw || typeof raw !== 'object') return base;
   const s = { ...base, ...raw };
-  s.players = raw.players && typeof raw.players === 'object' ? { ...raw.players } : {};
+  // Mapas sin prototipo: un id como "__proto__" nunca puede tocar Object.prototype.
+  s.players = Object.assign(Object.create(null), raw.players && typeof raw.players === 'object' ? raw.players : {});
   for (const id of Object.keys(s.players)) {
     const p = { ...s.players[id] };
     p.asked = p.asked && typeof p.asked === 'object' ? p.asked : {};
@@ -50,7 +51,7 @@ export function normalizeState(raw) {
     p.status = p.status || STATUS.ACTIVE;
     s.players[id] = p;
   }
-  s.questions = raw.questions && typeof raw.questions === 'object' ? raw.questions : {};
+  s.questions = Object.assign(Object.create(null), raw.questions && typeof raw.questions === 'object' ? raw.questions : {});
   s.log = Array.isArray(raw.log) ? raw.log.filter(Boolean) : Object.values(raw.log || {});
   s.settings = { ...base.settings, ...(raw.settings || {}) };
   s.seq = raw.seq || 0;
@@ -157,8 +158,9 @@ function shuffle(list, rng) {
   return a;
 }
 
-export function startGame(state0, { accomplices, totalSlices, hostPlays = true }, rng = defaultRng) {
+export function startGame(state0, { accomplices, totalSlices, hostPlays }, rng = defaultRng) {
   const state = normalizeState(clone(state0));
+  if (hostPlays === undefined) hostPlays = state.settings.hostPlays !== false;
   requirePhase(state, 'lobby');
   accomplices = Number(accomplices);
   totalSlices = Number(totalSlices);

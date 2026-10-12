@@ -24,7 +24,8 @@ Juego web de una sola página (HTML + JavaScript, sin compilación) pensado para
 ### Reglas implementadas
 
 - La ladrona empieza con toda la tarta. Puede pasar trozos a su banda (cómplices) y cualquiera puede
-  comerse un trozo que tenga. En el tablero se ve cuántos trozos se ha comido cada una.
+  comerse un trozo que tenga. En el tablero se ve cuántos trozos se ha comido cada una (¡ojo! comer
+  tarta es una pista: las detectives no tienen tarta salvo que hayan aceptado un soborno).
 - **Preguntar** (detectives, una vez a cada jugadora): «¿Eres tú la ladrona?». La preguntada puede:
   - responder «No, yo no he sido» (puede mentir), o
   - **ofrecer un soborno** de N trozos que tenga.

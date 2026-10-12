@@ -28,7 +28,8 @@ class LocalStore {
   read() {
     try {
       return normalizeState(JSON.parse(localStorage.getItem(this.key)));
-    } catch {
+    } catch (e) {
+      console.error('Estado guardado corrupto; se empieza de cero.', e);
       return normalizeState(null);
     }
   }
@@ -80,7 +81,8 @@ class FirebaseStore {
     const result = await this.ref.transaction((current) => {
       error = null;
       try {
-        return fn(normalizeState(current));
+        // Copia JSON plana (sin undefined ni objetos sin prototipo) para Firebase.
+        return JSON.parse(JSON.stringify(fn(normalizeState(current))));
       } catch (e) {
         error = e;
         return undefined; // aborta la transacción
